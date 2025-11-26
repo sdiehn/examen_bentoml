@@ -1,0 +1,26 @@
+service: "src.service:RFClassifierService"
+description: "Random Forest Classifier Service for predicting admission of students for university"
+labels:
+  owner: "Sabrina Diehn"
+  project: "BentoML exam"
+
+include:
+  - src/
+  - data/
+  - models/
+  - metrics/
+  - requirements.txt
+
+models:
+  - rf_student_admission:latest
+
+python:
+  packages:
+  #TODO: verify versions
+    - numpy==1.26.4
+    - pandas==2.3.3
+    - scikit-learn==1.3.2
+    - bentoml==1.4.26
+    - pydantic>=2.12.0
+    - requests==2.32.5
+    - pyjwt==2.10.1
