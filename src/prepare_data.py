@@ -26,8 +26,8 @@ def split_data():
     raw_data = raw_data.iloc[:, 1:]
 
     X_train, X_test, y_train, y_test = train_test_split(
-        raw_data.drop('Chance of Admit', axis=1),
-        raw_data['Chance of Admit'],
+        raw_data.drop('Chance of Admit ', axis=1),
+        raw_data['Chance of Admit '],
         test_size=0.2,
         random_state=42
     )
@@ -61,7 +61,7 @@ def main():
     ''' Create final dataset from raw data
     '''
     logger = logging.getLogger(__name__)
-    logger.info('making final data set from raw data')
+    logger.info('preprocessing data set')
 
     X_train, X_test, y_train, y_test = split_data()
     scale_and_save_data(X_train, X_test)

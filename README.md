@@ -1,28 +1,20 @@
 # Examen BentoML
 
-Ce repertoire contient l'architecture basique afin de rendre l'évaluation pour l'examen BentoML.
+Step by Step explanation:
 
-Vous êtes libres d'ajouter d'autres dossiers ou fichiers si vous jugez utile de le faire.
+- create virtual environment
 
-Voici comment est construit le dossier de rendu de l'examen:
+- Import the data
+    - download the data from https://assets-datascientest.s3.eu-west-1.amazonaws.com/MLOPS/bentoml/admission.csv
+    using src/import_datset.py and save it in data/raw
 
-```bash       
-├── examen_bentoml          
-│   ├── data       
-│   │   ├── processed      
-│   │   └── raw           
-│   ├── models      
-│   ├── src       
-│   └── README.md
-```
+- src/prepare_data.py: vectornormalize and split the data set from data/raw into "X" and "y", where "y" is "Chance of Admit"
+and save it in data/processed
 
-Afin de pouvoir commencer le projet vous devez suivre les étapes suivantes:
+- training
+    - with src/train_model.py using RandomForestRegressor taking the processed data from data/processed
+    and save the best model and the params in model
 
-- Forker le projet sur votre compte github
-
-- Cloner le projet sur votre machine
-
-- Récuperer le jeu de données à partir du lien suivant: [Lien de téléchargement]( https://datascientest.s3-eu-west-1.amazonaws.com/examen_bentoml/admissions.csv)
-
-
-Bon travail!
+- testing the model and saving to BentoML    
+    - using src/test_model.py, the model is model and tested with the test data set.
+    it saves the predictions, the merits, and the model

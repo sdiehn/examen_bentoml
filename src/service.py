@@ -16,12 +16,12 @@ USERS = {
     "user456": "password456"
 }
 
-CLASSIFIER_NAME = "rf_student_admission"
+CLASSIFIER_NAME = "random_forest_regressor_model"
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        if request.url.path == "/v1/models/rf_classifier/predict":
+        if request.url.path.endswith("/predict"):
             token = request.headers.get("Authorization")
             if not token:
                 return JSONResponse(status_code=401, content={"detail": "Missing authentication token"})
@@ -38,35 +38,14 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
 
 # Pydantic model to validate input data
 class InputModel(BaseModel):
-    place: int
-    catu: int
-    sexe: int
-    secu1: float
-    year_acc: int
-    victim_age: int
-    catv: int
-    obsm: int
-    motor: int
-    catr: int
-    circ: int
-    surf: int
-    situ: int
-    vma: int
-    jour: int
-    mois: int
-    lum: int
-    dep: int
-    com: int
-    agg_: int
-    int: int
-    atm: int
-    col: int
-    lat: float
-    long: float
-    hour: int
-    nb_victim: int
-    nb_vehicules: int
-
+    gre_score: float = Field(alias="GRE Score")
+    toefl_score: float = Field(alias="TOEFL Score")
+    university_rating: float = Field(alias="University Rating")
+    sop: float = Field(alias="SOP")
+    lor: float = Field(alias="LOR")
+    cgpa: float = Field(alias="CGPA")
+    research: int = Field(alias="Research")
+    
 # Function to create a JWT token
 def create_jwt_token(user_id: str):
     expiration = datetime.utcnow() + timedelta(hours=1)
@@ -79,7 +58,7 @@ def create_jwt_token(user_id: str):
 class RFClassifierService:
     def __init__(self) -> None:
         # Load the model using BentoML's sklearn API
-        self.model = bentoml.sklearn.load_model("{CLASSIFIER_NAME}:latest")
+        self.model = bentoml.sklearn.load_model(f"{CLASSIFIER_NAME}:latest")
 
     # Login endpoint
     @bentoml.api
@@ -94,19 +73,21 @@ class RFClassifierService:
 
     # Prediction endpoint
     @bentoml.api
-    def classify(self, input_data: InputModel) -> dict:
+    def predict(self, input_data: InputModel) -> dict:
         # Convert the input data to a numpy array
         input_series = np.array([
-            input_data.place, input_data.catu, input_data.sexe, input_data.secu1,
-            input_data.year_acc, input_data.victim_age, input_data.catv, input_data.obsm,
-            input_data.motor, input_data.catr, input_data.circ, input_data.surf,
-            input_data.situ, input_data.vma, input_data.jour, input_data.mois,
-            input_data.lum, input_data.dep, input_data.com, input_data.agg_,
-            input_data.int, input_data.atm, input_data.col, input_data.lat,
-            input_data.long, input_data.hour, input_data.nb_victim, input_data.nb_vehicules
+            input_data.gre_score,
+            input_data.toefl_score,
+            input_data.university_rating,
+            input_data.sop,
+            input_data.lor,
+            input_data.cgpa,
+            input_data.research
         ])
 
         # Run prediction
         result = self.model.predict(input_series.reshape(1, -1))
 
         return {"prediction": result.tolist()}
+
+RFClassifierService.add_asgi_middleware(JWTAuthMiddleware)

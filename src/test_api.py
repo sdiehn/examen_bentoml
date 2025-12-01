@@ -1,11 +1,8 @@
 import requests
 
-#TODO: change to students API   
-
-
 # The URL of the login and prediction endpoints
-login_url = "http://127.0.0.1:3001/login"
-predict_url = "http://127.0.0.1:3001/predict"
+login_url = "http://127.0.0.1:3000/login"
+predict_url = "http://127.0.0.1:3000/predict"
 
 # Data for login - must match the service signature
 login_payload = {
@@ -30,34 +27,13 @@ if login_response.status_code == 200:
     # Data to be sent to the prediction endpoint
     prediction_payload = {
         "input_data": {
-            "place": 10,
-            "catu": 3,
-            "sexe": 1,
-            "secu1": 0.0,
-            "year_acc": 2021,
-            "victim_age": 60,
-            "catv": 2,
-            "obsm": 1,
-            "motor": 1,
-            "catr": 3,
-            "circ": 2,
-            "surf": 1,
-            "situ": 1,
-            "vma": 50,
-            "jour": 7,
-            "mois": 12,
-            "lum": 5,
-            "dep": 77,
-            "com": 77317,
-            "agg_": 2,
-            "int": 1,
-            "atm": 0,
-            "col": 6,
-            "lat": 48.60,
-            "long": 2.89,
-            "hour": 17,
-            "nb_victim": 2,
-            "nb_vehicules": 1
+            "GRE Score": 320,
+            "TOEFL Score": 110,
+            "University Rating": 5,
+            "SOP": 4.5,
+            "LOR": 4.0,
+            "CGPA": 9.0,
+            "Research": 1
         }
     }
 
