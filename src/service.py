@@ -21,7 +21,7 @@ CLASSIFIER_NAME = "random_forest_regressor_model"
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        if request.url.path.endswith("/predict"):
+        if request.url.path == "/v1/models/rfclassifierservice/predict":
             token = request.headers.get("Authorization")
             if not token:
                 return JSONResponse(status_code=401, content={"detail": "Missing authentication token"})
