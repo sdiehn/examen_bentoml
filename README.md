@@ -18,3 +18,8 @@ and save it in data/processed
 - testing the model and saving to BentoML    
     - using src/test_model.py, the model is model and tested with the test data set.
     it saves the predictions, the merits, and the model
+
+- create BentoML API with bentoml serve
+- creating the Bento with bentoml build
+
+- testing the api with either the single test or pytest tests/test_all.py

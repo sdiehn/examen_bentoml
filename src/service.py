@@ -6,11 +6,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import jwt
 from datetime import datetime, timedelta
 
-# Secret key and algorithm for JWT authentication
 JWT_SECRET_KEY = "your_jwt_secret_key_here"
 JWT_ALGORITHM = "HS256"
 
-# User credentials for authentication
 USERS = {
     "user123": "password123",
     "user456": "password456"
@@ -26,7 +24,7 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
             if not token:
                 return JSONResponse(status_code=401, content={"detail": "Missing authentication token"})
             try:
-                token = token.split()[1]  # Remove 'Bearer ' prefix
+                token = token.split()[1]  
                 payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
             except jwt.ExpiredSignatureError:
                 return JSONResponse(status_code=401, content={"detail": "Token has expired"})
@@ -36,7 +34,6 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         return response
 
-# Pydantic model to validate input data
 class InputModel(BaseModel):
     gre_score: float = Field(alias="GRE Score")
     toefl_score: float = Field(alias="TOEFL Score")
@@ -46,21 +43,18 @@ class InputModel(BaseModel):
     cgpa: float = Field(alias="CGPA")
     research: int = Field(alias="Research")
     
-# Function to create a JWT token
 def create_jwt_token(user_id: str):
     expiration = datetime.utcnow() + timedelta(hours=1)
     payload = {"sub": user_id, "exp": expiration}
     token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
     return token
 
-# Create a BentoML Service using the new-style API (v1.4+)
+
 @bentoml.service
 class RFClassifierService:
     def __init__(self) -> None:
-        # Load the model using BentoML's sklearn API
         self.model = bentoml.sklearn.load_model(f"{CLASSIFIER_NAME}:latest")
 
-    # Login endpoint
     @bentoml.api
     def login(self, credentials: dict) -> dict:
         username = credentials.get("username")
@@ -71,10 +65,8 @@ class RFClassifierService:
         else:
             return JSONResponse(status_code=401, content={"detail": "Invalid credentials"})
 
-    # Prediction endpoint
     @bentoml.api
     def predict(self, input_data: InputModel) -> dict:
-        # Convert the input data to a numpy array
         input_series = np.array([
             input_data.gre_score,
             input_data.toefl_score,
@@ -85,7 +77,6 @@ class RFClassifierService:
             input_data.research
         ])
 
-        # Run prediction
         result = self.model.predict(input_series.reshape(1, -1))
 
         return {"prediction": result.tolist()}

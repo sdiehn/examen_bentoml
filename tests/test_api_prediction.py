@@ -40,14 +40,12 @@ def get_token():
 
 
 def test_valid_prediction(token):
-    """Test valid prediction with correct input and valid token"""
     headers = {"Authorization": f"Bearer {token}"}
     r = requests.post(PREDICT_URL, json={"input_data": VALID_INPUT}, headers=headers)
     print_output("Valid Prediction", 200, r.status_code)
     
 
 def test_invalid_input(token):
-    """Test error response with invalid input data"""
     headers = {"Authorization": f"Bearer {token}"}
     r = requests.post(PREDICT_URL, json={"input_data": INVALID_INPUT}, headers=headers)
     expected_status = 400
