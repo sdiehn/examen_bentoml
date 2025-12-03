@@ -22,6 +22,11 @@ and save it in data/processed
 - create BentoML API with bentoml serve
 - creating the Bento with bentoml build
 
+- Docker image
+    - bentoml containerize rf_classifier_service:latest
+    - docker run --rm -p 3001:3001 rf_classifier_service:latest
+    - docker save rf_classifier_service:hjyeamwqncwxkbtl -o Diehn_rf_classifier_service.tar
+
 - testing the api with either the single test in tests or pytest tests/test_all.py
 
 -token test are failing, but I don't understand why. I took the service.py from the lessons as a template.
