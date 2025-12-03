@@ -2,7 +2,7 @@
 
 Step by Step explanation:
 
-- create virtual environment
+- create virtual environment/install requirements.txt
 
 - Import the data
     - download the data from https://assets-datascientest.s3.eu-west-1.amazonaws.com/MLOPS/bentoml/admission.csv
@@ -22,4 +22,7 @@ and save it in data/processed
 - create BentoML API with bentoml serve
 - creating the Bento with bentoml build
 
-- testing the api with either the single test or pytest tests/test_all.py
+- testing the api with either the single test in tests or pytest tests/test_all.py
+
+-token test are failing, but I don't understand why. I took the service.py from the lessons as a template.
+I tried so many things back and forth still no idea.
